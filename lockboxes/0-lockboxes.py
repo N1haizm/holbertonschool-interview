@@ -2,7 +2,7 @@
 """Solves the boxes problem."""
 
 
-def can_unlock_all(boxes):
+def canUnlockAll(boxes):
     """Checks if all boxes can be unlocked.
 
     Args:
