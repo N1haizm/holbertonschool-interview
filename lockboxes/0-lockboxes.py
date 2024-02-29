@@ -1,23 +1,13 @@
 #!/usr/bin/python3
 """I wrote this code to solve the boxes problem"""
 
-def join(T,R):
-  res =[]
-  for e in R:
-    res += T[e]
-  return res
-
 def canUnlockAll(boxes):
-  index = 0
-  total = list(set(boxes[0])| {0})
-  added = True
-  while added:
-    added = False
-    for j in join(boxes,total[index:]):
-      if j not in total:
-        total.append(j)
-        index +=1
-        added= True
-  print(total)
-  
-  return len(total)==len(boxes)
+    for key in range(1, len(boxes)):
+        flag = False
+        for box in range(len(boxes)):
+            if key in boxes[box] and box != key:
+                flag = True
+                break
+        if not flag:
+            return False
+    return True
