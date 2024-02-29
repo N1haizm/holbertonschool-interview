@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""I wrote this code to solve the boxes problem"""
 
 def join(T,R):
   res =[]
