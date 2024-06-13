@@ -1,2 +1,2 @@
-# holbertonschool-heap_insert
+heap_insert
 
