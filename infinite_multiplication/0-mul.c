@@ -1,199 +1,105 @@
-#include "main.h"
-#include <stdlib.h>
-
-void putword(char *str);
-void error(void);
-void check_digit(char *str);
-int _strlen(char *s);
-int *__calloc(unsigned int nmemb, unsigned int size);
-void check_alloc(int *p);
-void multiply(int *finalRes, int len1, char *s1, int len2, char *s2);
-char *_memset(char *s, char b, unsigned int n);
+#include "holberton.h"
 
 /**
- * main - Run the process, make two inputed arg multiply
- *
- * @argc: Number of arg
- * @argv: Array of arg
- *
- * Return: 0 (succes)
+ * _puts - prints a string.
+ * @s: a string.
+ * Return: Nothing.
  */
-int main(int argc, char *argv[])
+void _puts(char *s)
 {
-	int len1, len2;
-	int *finalRes;
-
-	if (argc != 3 || argv[1] == NULL || argv[2] == NULL)
-		error();
-
-	check_digit(argv[1]);
-	check_digit(argv[2]);
-
-	len1 = _strlen(argv[1]);
-	len2 = _strlen(argv[2]);
-
-	finalRes = __calloc((len1 + len2), sizeof(int));
-
-	multiply(finalRes, len1, argv[1], len2, argv[2]);
-	free(finalRes);
-	return (0);
-}
-
-/**
- * putword - Print a word
- *
- * @str: Word to print
- *
- * Return: Anything, cause void function.
- */
-void putword(char *str)
-{
-	while (*str)
+	if (*s != '\0')
 	{
-		_putchar(*str);
-		str++;
+		_putchar(*s);
+		puts(s + 1);
 	}
 }
-
 /**
- * error - exit the code if any error.
- *
- * Return: Anything, cause void function
+ * err_message - print s and exit 98 status
+ * @s: error message to print
+ * Return: Nothing
  */
-void error(void)
+void err_message(char *s)
 {
-	putword("Error\n");
+	_puts(s);
 	exit(98);
 }
-
 /**
- * check_digit - Check if the str contain only digit
- *
- * @str: String to test
- *
- * Return: Anything, cause void function
+ * _isdigit - check if s is a number or not.
+ * @s: string to check.
+ * Return: 0 if s is a number otherwise 1.
  */
-void check_digit(char *str)
+int _isdigit(char *s)
 {
-	int i;
+	int i, digit = 0;
 
-	for (i = 0; *(str + i); i++)
+	for (i = 0; s[i] && !digit; i++)
 	{
-		if (!(str[i] >= '0' && str[i] <= '9'))
-			error();
+		if (s[i] < '0' || s[i] > '9')
+			digit++;
 	}
+	return (digit);
 }
-
 /**
- * _strlen - Calculate the length of a string.
- *
- * @s: String to manipulate.
- *
- * Return: The length of the inputed string.
+ * operations - multiplies, adds and stores the result in a string.
+ * @num1: first number.
+ * @num2: second number.
+ * @len1: length of num1.
+ * @len2: length of num2.
+ * Return: result of multiplies.
  */
-
-int _strlen(char *s)
+char *operations(char *num1, char *num2, int len1, int len2)
 {
-	int i;
+	char *result = NULL;
+	int i, j, carry, len_total = (len1 + len2);
 
-	for (i = 0; s[i]; i++)
-		;
-	return (i);
-}
-
-
-
-/**
- * __calloc - Recode the calloc function
- *
- * @nmemb: Length of the array that contain pointers
- * @size: Size of the elements pointed
- *
- * Return: NULL if any problem, pointer to the array else (succes)
- */
-int *__calloc(unsigned int nmemb, unsigned int size)
-{
-	void *pointer;
-
-	if (nmemb == 0 || size == 0)
-		error();
-
-	pointer = malloc(nmemb * size);
-	check_alloc(pointer);
-
-	_memset(pointer, 0, nmemb * size);
-
-	return (pointer);
-}
-
-/**
- * _memset - fills memory with a constant byte
- *
- * @s: Buffer adress
- * @b: Constant byte to fill memory
- * @n: Number of contant byte to fill
- *
- * Return: The buffer adress.
- */
-char *_memset(char *s, char b, unsigned int n)
-{
-	unsigned int i;
-
-	for (i = 0; i < n; i++)
-		*(s + i) = b;
-	return (s);
-}
-
-
-/**
- * check_alloc - check if the malloc is a succes
- *
- * @p: Pointer that been malloc
- *
- * Return: Anything, cause void function
- */
-void check_alloc(int *p)
-{
-	if (p == NULL)
-		error();
-}
-
-/**
- * multiply - multiply two sting and print it
- *
- * @finalRes: Reslut array
- * @len1: Length of the first str
- * @s1: First str
- * @len2: Length of the second str
- * @s2: Second str
- *
- * Return: Anything, cause void function.
- */
-void multiply(int *finalRes, int len1, char *s1, int len2, char *s2)
-{
-	int i, j, carry, n1, n2;
-
-	for (i = (len1 - 1); i >= 0; i--)
+	result = malloc(sizeof(char) * len_total);
+	if (!result)
+		err_message("Error");
+	for (i = 0; i < len_total; i++)
+		result[i] = '0';
+	for (i = len1 - 1; i >= 0; i--)
 	{
 		carry = 0;
-		n1 = s1[i] - '0';
-		for (j = (len2 - 1); j >= 0; j--)
+		for (j = len2 - 1; j >= 0; j--)
 		{
-			n2 = s2[j] - '0';
-			carry += n1 * n2 + finalRes[i + j + 1];
-			finalRes[i + j + 1] = carry % 10;
+			carry += (num1[i] - '0') * (num2[j] - '0');
+			carry += result[i + j + 1] - '0';
+			result[i + j + 1] = (carry % 10) + '0';
 			carry /= 10;
 		}
-		if (carry > 0)
-			finalRes[i + j + 1] += carry;
+		if (carry)
+			result[i + j + 1] = (carry % 10) + '0';
 	}
-	i = 0;
-	while (finalRes[i] == 0)
-		i++;
-	if (i >= len1 + len2 + 1)
-		_putchar('0');
+	return (result);
+}
+/**
+ * main - multiplies two positive numbers.
+ * description: Usage: mul num1 num2
+ * Print the result, followed by a new line.
+ * @av: arguments value (num1, num2)
+ * @ac: arguments count
+ * Return: 0 if success otherwise 98 and print Error.
+ */
+int main(int ac, char **av)
+{
+	int len1 = 0, len2 = 0;
+	char *num1 = av[1], *num2 = av[2], *result = NULL;
 
-	for ( ; i < (len1 + len2) ; i++)
-		_putchar(finalRes[i] + '0');
-	_putchar('\n');
+	if (ac != 3 || _isdigit(num1) || _isdigit(num2))
+		err_message("Error");
+	if (av[1][0] == 48 || av[2][0] == 48)
+		_puts("0"), exit(0);
+
+	while (num1[len1])
+		len1++;
+	while (num2[len2])
+		len2++;
+
+	result = operations(num1, num2, len1, len2);
+	if (result[0] == '0')
+		_puts(result + 1);
+	else
+		_puts(result);
+	free(result);
+	return (0);
 }
