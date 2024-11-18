@@ -1,1 +1,1 @@
-# infinite
+∞ Multiplication
